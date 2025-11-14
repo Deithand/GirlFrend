@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Telegram Girlfriend Bot - AI-powered virtual girlfriend
-Using Gemini AI and Telethon
+Telegram Girlfriend Userbot - AI-powered virtual girlfriend
+Using Gemini AI and Telethon (Userbot mode - messages from your account)
 """
 
 import os
@@ -25,7 +25,7 @@ load_dotenv()
 # Configuration
 API_ID = os.getenv('TELEGRAM_API_ID')
 API_HASH = os.getenv('TELEGRAM_API_HASH')
-BOT_TOKEN = os.getenv('BOT_TOKEN')
+PHONE_NUMBER = os.getenv('PHONE_NUMBER')  # Your phone number for userbot
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
 # Configure Gemini AI
@@ -82,7 +82,7 @@ def print_logo():
 ║  {Fore.CYAN}   ██║   ███████╗███████╗███████╗╚██████╔╝██║██║  ██║███████╗{Fore.MAGENTA}║
 ║  {Fore.CYAN}   ╚═╝   ╚══════╝╚══════╝╚══════╝ ╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝{Fore.MAGENTA}║
 ║                                                              ║
-║        {Fore.YELLOW}🤖 Virtual Girlfriend Bot powered by Gemini AI{Fore.MAGENTA}        ║
+║    {Fore.YELLOW}👤 Virtual Girlfriend Userbot powered by Gemini AI{Fore.MAGENTA}    ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝{Style.RESET_ALL}
 """
@@ -113,8 +113,6 @@ def check_config():
         missing.append('TELEGRAM_API_ID')
     if not API_HASH:
         missing.append('TELEGRAM_API_HASH')
-    if not BOT_TOKEN:
-        missing.append('BOT_TOKEN')
     if not GEMINI_API_KEY:
         missing.append('GEMINI_API_KEY')
 
@@ -122,6 +120,9 @@ def check_config():
         print_status(f"Отсутствуют обязательные переменные окружения: {', '.join(missing)}", 'error')
         print_status("Создайте файл .env и добавьте необходимые переменные", 'warning')
         sys.exit(1)
+
+    if not PHONE_NUMBER:
+        print_status("PHONE_NUMBER не указан - будет запрошен при запуске", 'warning')
 
     print_status("Конфигурация загружена успешно", 'success')
 
@@ -189,19 +190,25 @@ async def main():
     print_status("Проверка конфигурации...", 'info')
     check_config()
 
-    # Initialize Telegram client
-    print_status("Инициализация Telegram клиента...", 'info')
-    client = TelegramClient('girlfriend_bot', API_ID, API_HASH)
+    # Initialize Telegram client (userbot)
+    print_status("Инициализация Telegram клиента (userbot)...", 'info')
+    client = TelegramClient('girlfriend_userbot', API_ID, API_HASH)
 
     # Initialize Gemini with system prompt
     print_status("Настройка Gemini AI...", 'info')
 
-    # Start the client
-    await client.start(bot_token=BOT_TOKEN)
-    print_status("Бот успешно запущен!", 'success')
+    # Start the client as userbot
+    print_status("Авторизация в Telegram...", 'info')
+    if PHONE_NUMBER:
+        await client.start(phone=PHONE_NUMBER)
+    else:
+        await client.start()
+
+    print_status("Userbot успешно запущен!", 'success')
 
     me = await client.get_me()
-    print_status(f"Работаю как: @{me.username}", 'success')
+    username = f"@{me.username}" if me.username else me.phone
+    print_status(f"Работаю как: {username} ({me.first_name})", 'success')
     print(f"\n{Fore.GREEN}{'='*60}")
     print(f"  Бот готов к работе! Жду сообщений...")
     print(f"{'='*60}{Style.RESET_ALL}\n")
