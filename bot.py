@@ -13,6 +13,7 @@ from datetime import datetime
 from telethon import TelegramClient, events
 from telethon.tl.types import User
 import google.generativeai as genai
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 from colorama import Fore, Back, Style, init
 from dotenv import load_dotenv
 
@@ -159,10 +160,10 @@ async def get_ai_response(user_id, message_text):
                 max_output_tokens=200,
             ),
             safety_settings={
-                'HARASSMENT': 'block_none',
-                'HATE_SPEECH': 'block_none',
-                'SEXUALLY_EXPLICIT': 'block_none',
-                'DANGEROUS_CONTENT': 'block_none'
+                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
             }
         )
 
