@@ -396,6 +396,16 @@ cd GirlFrend
 python main.py
 ```
 
+### Ошибка "Metaclasses with custom tp_new are not supported" (Python 3.14)
+Если вы используете Python 3.14 и видите ошибку с protobuf:
+```bash
+# Переустановите зависимости с обновленными версиями
+pip install --upgrade -r requirements.txt
+# или принудительно переустановите protobuf
+pip install --upgrade --force-reinstall protobuf
+```
+Эта ошибка возникает из-за несовместимости старых версий protobuf с Python 3.14. Обновленный requirements.txt включает совместимую версию.
+
 ## ⚠️ Важно
 
 ### Безопасность
