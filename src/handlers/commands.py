@@ -27,6 +27,8 @@ class CommandHandler:
             'personality': self.cmd_personality,
             'personalities': self.cmd_list_personalities,
             'version': self.cmd_version,
+            'offline': self.cmd_offline,
+            'online': self.cmd_online,
         }
 
     async def handle_command(self, event, user_id: int, command: str, args: str) -> Optional[str]:
@@ -53,11 +55,14 @@ class CommandHandler:
 !personalities - показать доступные стили
 !ignore - игнорировать сообщения от меня
 !unignore - снять игнор
+!offline - выйти в оффлайн (читаю но не отвечаю)
+!online - вернуться онлайн
 !version - показать версию бота
 
 Примеры:
 !personality romantic - переключиться на романтичный стиль
 !personality playful - переключиться на игривый стиль
+!offline - зайти в режим "не беспокоить"
 """
         return help_text
 
@@ -124,6 +129,18 @@ class CommandHandler:
             text += f"• {feature}\n"
 
         return text
+
+    async def cmd_offline(self, event, user_id: int, args: str) -> str:
+        """Enable offline mode (v1.1.1 feature)"""
+        self.config.set_offline_mode(True)
+        self.logger.info("Offline mode enabled")
+        return "ок, ухожу в оффлайн. буду читать сообщения но не отвечать. напиши !online когда захочешь чтобы я вернулась"
+
+    async def cmd_online(self, event, user_id: int, args: str) -> str:
+        """Disable offline mode (v1.1.1 feature)"""
+        self.config.set_offline_mode(False)
+        self.logger.info("Offline mode disabled")
+        return "ок, я онлайн. снова буду отвечать на сообщения"
 
     def is_command(self, text: str) -> bool:
         """Check if message is a command"""

@@ -4,7 +4,7 @@
 Version information for Telegram Girlfriend Userbot
 """
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __title__ = "Telegram Girlfriend Userbot"
 __description__ = "AI-powered virtual girlfriend using Gemini AI and Telethon"
 __author__ = "GirlFrend Team"
@@ -27,6 +27,8 @@ VERSION_INFO = {
         'Auto reactions',
         'Ignore list',
         'File logging with rotation',
+        'Auto read messages (mark as read)',
+        'Offline mode - read but don\'t respond',
     ]
 }
 
