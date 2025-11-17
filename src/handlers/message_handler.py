@@ -36,9 +36,21 @@ class MessageHandler:
             user_id = user.id
             message_text = event.message.text
 
+            # Mark message as read (automatically)
+            try:
+                await client.send_read_acknowledge(event.chat_id, event.message)
+                self.logger.debug(f"Marked message as read from {user_name}")
+            except Exception as e:
+                self.logger.debug(f"Could not mark as read: {str(e)}")
+
             # Check if user is ignored
             if self.config.is_user_ignored(user_id):
                 self.logger.info(f"Ignored message from {user_name} (ID: {user_id})")
+                return
+
+            # Check if bot is in offline mode
+            if self.config.is_offline_mode():
+                self.logger.info(f"Offline mode: read message from {user_name} but not responding")
                 return
 
             # Record incoming message

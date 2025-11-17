@@ -57,6 +57,9 @@ class Config:
         # Ignored users
         self.ignored_users: set = set()
 
+        # Offline mode (v1.1.1 feature)
+        self.offline_mode: bool = False
+
     def _load_personalities(self) -> Dict[str, Any]:
         """Load personality configurations from JSON file"""
         personalities_file = self.CONFIG_DIR / 'personalities.json'
@@ -128,6 +131,14 @@ class Config:
                     self.ignored_users = set(json.load(f))
         except Exception as e:
             print(f"Error loading ignored users: {e}")
+
+    def set_offline_mode(self, enabled: bool):
+        """Enable or disable offline mode (v1.1.1 feature)"""
+        self.offline_mode = enabled
+
+    def is_offline_mode(self) -> bool:
+        """Check if bot is in offline mode (v1.1.1 feature)"""
+        return self.offline_mode
 
 
 # Global config instance
