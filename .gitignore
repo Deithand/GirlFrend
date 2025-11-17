@@ -5,6 +5,17 @@
 *.session
 *.session-journal
 
+# Bot data (v1.1)
+data/
+!data/.gitkeep
+data/history/
+data/sessions/
+data/*.json
+
+# Logs
+*.log
+logs/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -46,7 +57,3 @@ env/
 # OS
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-logs/
