@@ -3,3 +3,5 @@ google-generativeai==0.3.2
 python-dotenv==1.0.0
 colorama==0.4.6
 asyncio
+
+# Note: asyncio is built-in to Python 3.8+, no need to install separately
